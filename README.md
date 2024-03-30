@@ -1,2 +1,2 @@
 # ada-js-dom
-This is our final project
+A to-do list using bootstrap.
