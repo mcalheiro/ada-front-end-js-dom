@@ -1,1 +1,22 @@
 /* Angelo, faça sua mágica */
+
+#top-bar {
+    background: blueviolet;
+}
+
+#list-items {
+    background: violet;
+}
+
+.empty-card {
+    background: lightgray;
+}
+
+.task-card {
+    background: lightgray;
+}
+
+.btn-primary {
+    background: none;
+    border: none;
+}
