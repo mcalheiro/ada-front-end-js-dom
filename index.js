@@ -1,4 +1,39 @@
-// Giovanna, faça sua mágica
+// INÍCIO DO CÓDIGO GIOVANNA
+
+let listaDeTarefas = [];
+
+// Função para adicionar uma tarefa à lista
+function adicionarTarefa(tarefa) {
+    listaDeTarefas.push(tarefa);
+}
+
+// Função para editar uma tarefa existente
+function editarTarefa(indice, novaDescricao) {
+    if (indice >= 0 && indice < listaDeTarefas.length) {
+        listaDeTarefas[indice] = novaDescricao;
+    } else {
+        console.log("Índice de tarefa inválido.");
+    }
+}
+
+// Função para remover uma tarefa da lista
+function removerTarefa(indice) {
+    if (indice >= 0 && indice < listaDeTarefas.length) {
+        listaDeTarefas.splice(indice, 1);
+    } else {
+        console.log("Índice de tarefa inválido.");
+    }
+}
+
+// Função para listar todas as tarefas
+function listarTarefas() {
+    console.log("Tarefas:");
+    listaDeTarefas.forEach((tarefa, indice) => {
+        console.log(`${indice + 1}. ${tarefa}`);
+    });
+}
+
+// FINAL DO CÓDIGO GIOVANNA
 
 const TASKS_ENDPOINT = 'https://crudcrud.com/api/4f1a001aa5e4410eb95f1b9901cb2061/tasks';
 
