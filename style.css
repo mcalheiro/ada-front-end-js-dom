@@ -1,22 +1,72 @@
-/* Angelo, faça sua mágica */
+* {
+    background-color:  #8A2BE2;
+}
+
+:root {
+    --purple-bg: #8A2BE2;
+    --light-purple-bg: #ffffff;
+    --white: #fff;
+}
+
 
 #top-bar {
-    background: blueviolet;
+    background-color: var(--purple-bg);
+    color: var(--white);
+}
+
+#app-title {
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#current-time, #current-date {
+    font-size: 0.75rem;
+    margin-bottom: 0;
+}
+
+#add-button button {
+    background-color: var(--light-purple-bg);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+}
+
+#add-button i {
+    font-size: 1.5rem;
+    background-color: white;
+    color: #8A2BE2;
 }
 
 #list-items {
-    background: violet;
+    background-color: var(--purple-bg);
+    color: var(--white);
 }
+
 
 .empty-card {
-    background: lightgray;
+    background-color: var(--light-purple-bg);
+    color: #8A2BE2FF;
+    border: none;
+    text-align: center;
+    height: 100px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-
-.task-card {
-    background: lightgray;
+.empty-card:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary {
-    background: none;
-    border: none;
+    background-color: var(--light-purple-bg);
+    border-color: var(--light-purple-bg);
+}
+
+.btn-primary:not(#add-button button) {
+    background-color: var(--purple-bg);
+    color: var(--white);
+}
+
+.btn-primary:not(#add-button button) i {
+    font-size: 1rem;
 }
