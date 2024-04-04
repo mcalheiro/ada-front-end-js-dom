@@ -25,6 +25,7 @@ function removerTarefa(indice) {
     }
 }
 
+
 // Função para listar todas as tarefas
 function listarTarefas() {
     console.log("Tarefas:");
