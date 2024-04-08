@@ -1,5 +1,5 @@
-* {
-    background-color:  #8A2BE2;
+html {
+    background: var(--purple-bg);
 }
 
 :root {
@@ -42,7 +42,6 @@
     color: var(--white);
 }
 
-
 .empty-card {
     background-color: var(--light-purple-bg);
     color: #8A2BE2FF;
@@ -52,8 +51,19 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: transform 0.3s, box-shadow 0.3s;
 }
+
+.task-card {
+    background-color: var(--light-purple-bg);
+    color: #8A2BE2FF;
+    border: none;
+    text-align: center;
+    height: 100px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: black;
+}
 .empty-card:hover {
-    transform: scale(1.04);
+    transform: scale(1.01);
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -69,4 +79,17 @@
 
 .btn-primary:not(#add-button button) i {
     font-size: 1rem;
+}
+
+.form-check-input {
+    height: 1.5em;
+    width: 1.5em;
+}
+
+.task-prop1 {
+    color: grey;
+}
+
+.btn-close {
+    display: none;
 }
