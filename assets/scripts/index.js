@@ -121,15 +121,6 @@ function addDeleteButtonListeners() {
   });
 }
 
-// function addEditButtonListeners() {
-//   const editButtons = document.querySelectorAll("#edit-task-btn")
-//   editButtons.forEach(button => {
-//     button.addEventListener("click", () => {
-//       const taskObj = button.getAttribute("task");
-//       console.log(taskObj)
-//     });
-//   });
-// }
 
 function addEditButtonListeners() {
   const editButtons = document.querySelectorAll("#edit-task-btn");
