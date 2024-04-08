@@ -1,5 +1,6 @@
-const API_KEY = '6303c3dd6aba4920b1c6faf30f9c1feb'
+const API_KEY = '1cde4cec99d849f289fff280294a645e'
 const TASKS_URL = `https://crudcrud.com/api/${API_KEY}/tasks`;
+let editId = ""
 
 let task = (title, category, hour) => {
     return JSON.stringify({
@@ -101,16 +102,6 @@ function renderTasks(tasks) {
   }
 }
 
-
-
-
-document.addEventListener("DOMContentLoaded", function() {
-  const doneButton = document.getElementById("doneButton")
-  doneButton.addEventListener("click", addTask)
-})
-document.addEventListener("DOMContentLoaded", fetchDataAndDisplay)
-
-
 function addDeleteButtonListeners() {
   const deleteButtons = document.querySelectorAll("#delete-task-btn");
   deleteButtons.forEach(button => {
@@ -132,11 +123,10 @@ function addEditButtonListeners() {
       document.getElementById('edit-task').value = taskObj.title;
       document.getElementById('edit-category').value = taskObj.category;
       document.getElementById('edit-hour').value = taskObj.hour;
+      editId = taskObj._id
     });
   });
 }
-
-
 
 function deleteTask(taskId) {
   fetch(`${TASKS_URL}/${taskId}`, {
@@ -154,3 +144,58 @@ function deleteTask(taskId) {
     console.error("Error deleting task:", error);
   });
 }
+
+async function putTask(taskId, updatedTask) {
+  const options = {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: updatedTask,
+  };
+
+  try {
+      const response = await fetch(`${TASKS_URL}/${taskId}`, options);
+      if (response.ok) {
+          // console.log(`Task ${taskId} updated successfully`);
+          fetchDataAndDisplay()
+      } else {
+          console.error("Failed to update task:", response.statusText);
+      }
+  } catch (error) {
+      console.error("Error updating task:", error);
+  }
+}
+
+function editTask(taskId) {
+  const taskTitle = document.getElementById("edit-task").value.trim()
+  const taskCategory = document.getElementById("edit-category").value.trim()
+  const taskHour = document.getElementById("edit-hour").value.trim()
+
+  if (taskTitle === '' || taskCategory === '' || taskHour === '') {
+    alert('Por favor, preencha todos os campos.');
+    return;
+  }
+
+  const taskObj = task(taskTitle, taskCategory, taskHour)
+  putTask(taskId, taskObj)
+  console.log(`Task saved! \n${taskObj}`)
+
+  const modalElement = document.getElementById("editModal")
+  const modal = bootstrap.Modal.getInstance(modalElement)
+  modal.hide()
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  const doneButton = document.getElementById("doneButton")
+  doneButton.addEventListener("click", addTask)
+})
+
+document.addEventListener("DOMContentLoaded", function() {
+  const doneButton = document.getElementById("edit-save")
+  doneButton.addEventListener("click", function() {
+    editTask(editId);
+  });
+})
+
+document.addEventListener("DOMContentLoaded", fetchDataAndDisplay)
