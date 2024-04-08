@@ -1,5 +1,5 @@
-const API_KEY = 'c430221b0ea84a35b6f3d72234b68c7a'
-const TASKS_ENDPOINT = `https://crudcrud.com/api/${API_KEY}/tasks`;
+const API_KEY = '6303c3dd6aba4920b1c6faf30f9c1feb'
+const TASKS_URL = `https://crudcrud.com/api/${API_KEY}/tasks`;
 
 let task = (title, category, hour) => {
     return JSON.stringify({
@@ -19,7 +19,10 @@ const options = {
     body: task,
     }
     try {
-    const response = await fetch(TASKS_ENDPOINT, options)
+    const response = await fetch(TASKS_URL, options)
+    if (response.ok) {
+      fetchDataAndDisplay()
+    }
     return await response.json();
     } catch (error) {
     throw error;
@@ -27,9 +30,16 @@ const options = {
 }    
 
 function addTask() {
-    const taskTitle = document.getElementById("task").value
-    const taskCategory = document.getElementById("category").value
-    const taskHour = document.getElementById("hour").value
+    const taskTitle = document.getElementById("task").value.trim()
+    const taskCategory = document.getElementById("category").value.trim()
+    const taskHour = document.getElementById("hour").value.trim()
+
+    if (taskTitle === '' || taskCategory === '' || taskHour === '') {
+      alert('Por favor, preencha todos os campos.');
+      return;
+    }
+
+
     const taskObj = task(taskTitle, taskCategory, taskHour)
     postTask(taskObj)
     console.log(`Task saved! \n${taskObj}`)
@@ -37,13 +47,11 @@ function addTask() {
     const modalElement = document.getElementById("taskModal")
     const modal = bootstrap.Modal.getInstance(modalElement)
     modal.hide()
-    
-    fetchDataAndDisplay()
   }
   
 
 function fetchDataAndDisplay() {
-  fetch(TASKS_ENDPOINT)
+  fetch(TASKS_URL)
   .then(response => response.json())
   .then(renderTasks)
   .catch(error => {
@@ -60,13 +68,12 @@ function renderTasks(tasks) {
     <div class="empty-card rounded-3 m-2 d-flex align-items-center justify-content-center">
       <p class="mb-0 pt-2 pb-2" style="background-color: white">Ainda não há tarefas para este dia!</p>
     </div>`
-      todoList.appendChild(listItem);
   } else {
   tasks.forEach(item => {
     const checked = (item.done) ? 'checked' : ''
     todoList.innerHTML += `
     <div class="task-card rounded-3 m-2 d-flex align-items-center justify-content-between">
-      <div id="task-data" class="d-flex justify-content-between p-2 align-items-center">
+      <div id="task-data" class="d-flex justify-content-between p-3 align-items-center">
         <div id="task-status" class="form-check pe-2">
           <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" ${checked}>
         </div>
@@ -80,18 +87,22 @@ function renderTasks(tasks) {
           </div>
       </div>
     </div>
-      <div id="task-actions" class="p-2">
-        <button id="edit-tasks-btn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal" data-id="${item._id}">
+      <div id="task-actions" class="p-3">
+        <button id="edit-task-btn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">
           <i class="bi bi-pencil-square"></i>
         </button>
-        <button id="delete-tasks-btn" type="button" class="btn btn-primary" data-id="${item._id}">
+        <button id="delete-task-btn" type="button" class="btn btn-primary" data-id="${item._id}">
           <i class="bi bi-trash"></i>
         </button>
       </div>
     </div>`
     })
+    addDeleteButtonListeners();
   }
 }
+
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
   const doneButton = document.getElementById("doneButton")
@@ -99,3 +110,32 @@ document.addEventListener("DOMContentLoaded", function() {
 })
 document.addEventListener("DOMContentLoaded", fetchDataAndDisplay)
 
+// -------------------------------
+// Function to add event listeners to delete buttons
+function addDeleteButtonListeners() {
+  const deleteButtons = document.querySelectorAll("#delete-task-btn");
+  deleteButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const taskId = button.getAttribute("data-id");
+      deleteTask(taskId);
+    });
+  });
+}
+
+// Function to delete a task
+function deleteTask(taskId) {
+  fetch(`${TASKS_URL}/${taskId}`, {
+    method: "DELETE"
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log(`Task ${taskId} deleted successfully`);
+      fetchDataAndDisplay(); // Fetch and display updated data after deletion
+    } else {
+      console.error("Failed to delete task:", response.statusText);
+    }
+  })
+  .catch(error => {
+    console.error("Error deleting task:", error);
+  });
+}
