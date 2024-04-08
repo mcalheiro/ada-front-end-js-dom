@@ -39,7 +39,6 @@ function addTask() {
       return;
     }
 
-
     const taskObj = task(taskTitle, taskCategory, taskHour)
     postTask(taskObj)
     console.log(`Task saved! \n${taskObj}`)
@@ -87,17 +86,18 @@ function renderTasks(tasks) {
           </div>
       </div>
     </div>
-      <div id="task-actions" class="p-3">
-        <button id="edit-task-btn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">
+      <div id="task-actions" class="p-3">\
+        <button id="edit-task-btn" type="button" class="btn btn-primary" data-bs-toggle="modal data-bs-target="#taskModal" task=${JSON.stringify(item)}>
           <i class="bi bi-pencil-square"></i>
         </button>
-        <button id="delete-task-btn" type="button" class="btn btn-primary" data-id="${item._id}">
+        <button id="delete-task-btn" type="button" class="btn btn-primary" task-id="${item._id}">
           <i class="bi bi-trash"></i>
         </button>
       </div>
     </div>`
     })
-    addDeleteButtonListeners();
+    addDeleteButtonListeners()
+    addEditButtonListeners()
   }
 }
 
@@ -110,19 +110,43 @@ document.addEventListener("DOMContentLoaded", function() {
 })
 document.addEventListener("DOMContentLoaded", fetchDataAndDisplay)
 
-// -------------------------------
-// Function to add event listeners to delete buttons
+
 function addDeleteButtonListeners() {
   const deleteButtons = document.querySelectorAll("#delete-task-btn");
   deleteButtons.forEach(button => {
     button.addEventListener("click", () => {
-      const taskId = button.getAttribute("data-id");
+      const taskId = button.getAttribute("task-id");
       deleteTask(taskId);
     });
   });
 }
 
-// Function to delete a task
+// function addEditButtonListeners() {
+//   const editButtons = document.querySelectorAll("#edit-task-btn")
+//   editButtons.forEach(button => {
+//     button.addEventListener("click", () => {
+//       const taskObj = button.getAttribute("task");
+//       console.log(taskObj)
+//     });
+//   });
+// }
+
+function addEditButtonListeners() {
+  const editButtons = document.querySelectorAll("#edit-task-btn");
+  editButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const taskObj = JSON.parse(button.getAttribute("task"));
+      const modal = new bootstrap.Modal(document.getElementById('editModal'));
+      modal.show();
+      document.getElementById('edit-task').value = taskObj.title;
+      document.getElementById('edit-category').value = taskObj.category;
+      document.getElementById('edit-hour').value = taskObj.hour;
+    });
+  });
+}
+
+
+
 function deleteTask(taskId) {
   fetch(`${TASKS_URL}/${taskId}`, {
     method: "DELETE"
@@ -130,7 +154,7 @@ function deleteTask(taskId) {
   .then(response => {
     if (response.ok) {
       console.log(`Task ${taskId} deleted successfully`);
-      fetchDataAndDisplay(); // Fetch and display updated data after deletion
+      fetchDataAndDisplay();
     } else {
       console.error("Failed to delete task:", response.statusText);
     }
